@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link
+      rel="apple-touch-icon"
+      sizes="76x76"
+      href="../assets/img/apple-icon.png"
+    />
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+      Login
+    </title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.css"
+    />
+    <meta
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no"
+      name="viewport"
+    />
+    <!--     Fonts and icons     -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200|Open+Sans+Condensed:700"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+      crossorigin="anonymous"
+    />
+    <!-- CSS Files -->
+    <link href="./assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="./assets/css/now-ui-kit.css?v=1.3.1" rel="stylesheet" />
+  </head>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      var max_fields = 10; //maximum input boxes allowed
+      var wrapper = $(".medics"); //Fields wrapper
+      var add_button = $(".new-med"); //Add button ID
+
+      var x = 1; //initlal text box count
+
+      $(add_button).click(function(e) {
+        //on add input button click
+        e.preventDefault();
+        if (x < max_fields) {
+          //max input box allowed
+          var html = [
+            '\n<div class="row"><div class="col"><input type="text" class="form-control " placeholder="Medicine Name"></div><div class="form-check form-check-inline"><label class="form-check-label"><input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1"> M<span class="form-check-sign"><span class="check"></span></span></label></div><div class="form-check form-check-inline"><label class="form-check-label"><input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2"> A<span class="form-check-sign"><span class="check"></span></span></label></div><div class="form-check form-check-inline"><label class="form-check-label"><input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3"> N<span class="form-check-sign"><span class="check"></span></span></label></div><a href="#" class="remove_field">Remove</a></div></div>'
+          ];
+          //text box increment
+          $(wrapper).append(html.join(""));
+          x++;
+        }
+      });
+
+      $(wrapper).on("click", ".remove_field", function(e) {
+        //user click on remove text
+
+        e.preventDefault();
+        $(this)
+          .parent("div")
+          .remove();
+        x--;
+      });
+    });
+  </script>
+
+  <body
+    class="login-page sidebar-collapse"
+    style="background-image:url(bg.jpg)"
+    style="background-size: auto;"
+  >
+    <!-- Navbar -->
+    <nav
+      class="navbar navbar-expand-lg bg-white fixed-top navbar-transparent"
+      color-on-scroll="500"
+    >
+      <div class="container">
+        <div class="navbar-translate">
+          <a
+            class="navbar-brand"
+            href="https://demos.creative-tim.com/now-ui-kit-pro/index.html"
+            rel="tooltip"
+            title="HackCBS"
+            data-placement="bottom"
+            target="_blank"
+          >
+            CHILLPILL
+          </a>
+          <button  class="btn btn-warning btn-danger btn-round btn-sm" onclick="mainApp.logout();">Logout</button>
+
+        </div>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+
+    <div class="page-header header-filter" filter-color="black">
+      <div
+        class="page-header-image"
+        style="background-image:url(bg.jpg)"
+        style="background-size: auto;"
+      ></div>
+      <div class="container">
+        <div class="jumbotron row">
+          <p></p>
+          <div class="col-sm-12" style="color: black;">
+            <h3>Details</h3>
+          </div>
+          <div class="col" style="color: black;" align="left">
+            <b>Name:</b> <span id="b1"></span>
+            <br />
+            <b>Age:</b> <span id="b2"></span>
+            <br />
+            <b>Blood Pressure:</b> <span id="b3"></span>
+            <br />
+            <b>Weight:</b> <span id="b4"></span>
+            <br />
+
+            <div class="report">
+              <br />
+              <div class="row">
+                <div class="col-md-12">
+                  <div id="accordion" role="tablist" aria-multiselectable="true" class="card-collapse">
+                    <div class="card card-plain">
+                      <div class="card-header" role="tab" id="headingOne">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                          <button class="btn btn-info btn-round" data-toggle="modal" data-target="#myModal">
+                            <i class="now-ui-icons files_single-copy-04"></i> Reports
+                          </button>
+                          <i class="now-ui-icons arrows-1_minimal-down"></i>
+                        </a>
+                      </div>
+                      <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="card-body">
+                            <button class="btn btn-info btn-round" data-toggle="modal" data-target="#myModal" id="r1" onclick=""https://firebasestorage.googleapis.com/v0/b/cbshack-3c5ee.appspot.com/o/ReportsFee_Receipt.pdf?alt=media&token=ed0b2a94-0f1d-4723-a25e-72b99157d11d"">Report1</button>
+                            <!-- <button class="btn btn-info btn-round" data-toggle="modal" data-target="#myModal" id="r2">Report2</button> -->
+                            <!-- <button class="btn btn-info btn-round" data-toggle="modal" data-target="#myModal">Report3</button> -->
+                            <!-- <button class="btn btn-info btn-round" data-toggle="modal" data-target="#myModal">Report4</button> -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
+            <div class="doctor-form" style="color: black;">
+              <form align="left">
+                <div class="fields">
+                  <br />
+                  <div class="form-group">
+                    <label for="inputAddress2"><b>Remarks:</b></label>
+                    <input
+                      rows="10"
+                      type="text"
+                      class="form-control"
+                      id="remarks"
+                      placeholder="Remarks"
+                    />
+                    <label for="inputAddress2"
+                      ><b>Medicines:&nbsp;&nbsp;&nbsp;</b></label
+                    >
+                    <button class="btn btn-primary btn-round btn-sm new-med">
+                      +
+                    </button>
+                    <div class="medics">
+                      <div class="row medicine-input">
+                        <div class="col">
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Medicine Name"
+                            id="medicines"
+                          />
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <label class="form-check-label">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              id="cb1"
+                              value="option1"
+                            />
+                            M
+                            <span class="form-check-sign">
+                              <span class="check"></span>
+                            </span>
+                          </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <label class="form-check-label">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              id="cb2"
+                              value="option2"
+                            />
+                            A
+                            <span class="form-check-sign">
+                              <span class="check"></span>
+                            </span>
+                          </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <label class="form-check-label">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              id="cb3"
+                              value="option3"
+                            />
+                            N
+                            <span class="form-check-sign">
+                              <span class="check"></span>
+                            </span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <b>Next Appointment:</b>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="datepicker-container">
+                          <div class="form-group">
+                            <input
+                              type="text"
+                              class="form-control datepicker"
+                              value="10/05/2016"
+                              id="date"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    type="submit"
+                    class="btn btn-primary btn-round"
+                    id="submitButton"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script src="https://www.gstatic.com/firebasejs/7.2.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.2.1/firebase.js"></script>
+  <script src="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
+  <!-- <script src="fireBase.js"></script> -->
+  <script src="doctorDemo.js"></script>
+  <script src="login.js"></script>
+  <script src="main.js"></script>
+  <script src="./assets/js/core/jquery.min.js" type="text/javascript"></script>
+  <script src="./assets/js/core/popper.min.js" type="text/javascript"></script>
+  <script
+    src="./assets/js/core/bootstrap.min.js"
+    type="text/javascript"
+  ></script>
+  <!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
+  <script src="./assets/js/plugins/bootstrap-switch.js"></script>
+  <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
+  <script
+    src="./assets/js/plugins/nouislider.min.js"
+    type="text/javascript"
+  ></script>
+  <!--  Plugin for the DatePicker, full documentation here: https://github.com/uxsolutions/bootstrap-datepicker -->
+  <script src="./assets/js/plugins/moment.min.js"></script>
+  <!--	Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
+  <script src="./assets/js/plugins/bootstrap-tagsinput.js"></script>
+  <!--	Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
+  <script
+    src="./assets/js/plugins/bootstrap-selectpicker.js"
+    type="text/javascript"
+  ></script>
+  <!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
+  <script
+    src="./assets/js/plugins/bootstrap-datetimepicker.js"
+    type="text/javascript"
+  ></script>
+  <!-- Control Center for Now Ui Kit: parallax effects, scripts for the example pages etc -->
+  <script
+    src="./assets/js/now-ui-kit.js?v=1.3.1"
+    type="text/javascript"
+  ></script>
+</html>
