@@ -9,10 +9,8 @@ var config = {
   messagingSenderId: "870444139737",
   appId: "1:870444139737:web:3a9d13478b207a68a7eac8",
   measurementId: "G-CBB3EQN0FF"
-  };
-if(!hasInit){
-    firebase.initializeApp(config);
-    hasInit = true;
+};
+if (!hasInit) {
+  firebase.initializeApp(config);
+  hasInit = true;
 }
-
-
