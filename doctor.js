@@ -5,8 +5,7 @@ var firebaseConfig = {
   projectId: "chillpill-fde7c",
   storageBucket: "chillpill-fde7c.appspot.com",
   messagingSenderId: "870444139737",
-  appId: "1:870444139737:web:3a9d13478b207a68a7eac8",
-  measurementId: "G-CBB3EQN0FF"
+  appId: "1:870444139737:web:3a9d13478b207a68a7eac8"
 };
 firebase.initializeApp(firebaseConfig);
 
@@ -47,7 +46,7 @@ messaging.onMessage(function(payload) {
   var patientData = databaseRef.once("value", gotData, errData);
   function gotData(data) {
     var requiredInfo = { ...data.val() };
-    personalInfo = requiredInfo[messageReceived]["Personal_Info"];
+    personalInfo = requiredInfo[messageReceived]["Personal Info"];
     name = personalInfo["Name"];
     console.log("name=======" + name);
     age = personalInfo["Age"];
@@ -110,7 +109,7 @@ const sendNotification = async (message, id) => {
       headers: {
         "Content-Type": "application/json",
         Authorization:
-          "key=AAAAyqqDhNk:APA91bFzMXH66vRN_SU41gEsDVgnNkIu6zq3hgY9SljqoRtf1D3oOSRS28BijHf829jq-y0wOCnzpPEpO7MvzLTB6NIgW5mFLG65RLg6irMYeA-Hi6SzGMbxRMPsnJMpmq39t9RT3UqO"
+          "AAAAyqqDhNk:APA91bFzMXH66vRN_SU41gEsDVgnNkIu6zq3hgY9SljqoRtf1D3oOSRS28BijHf829jq-y0wOCnzpPEpO7MvzLTB6NIgW5mFLG65RLg6irMYeA-Hi6SzGMbxRMPsnJMpmq39t9RT3UqO"
       }
     };
     // var data = {
@@ -148,28 +147,52 @@ if (doctorForm) {
     e.preventDefault();
     const date = document.getElementById("date").value;
     const remarks = document.getElementById("remarks").value;
-    const medicines = document.getElementById("medicines").value;
-    console.log("medicines=========" + medicines);
+    // const medicines = document.getElementById("medicines").value;
+    // console.log("medicines=========" + medicines);
     var routine = "";
-    const cb1 = document.getElementById("cb1").checked;
-    if (cb1 === true) {
-      routine += "X";
-    } else {
-      routine += "0";
+    const arrMedi = document.getElementsByName("medi");
+    const arrCheck = document.getElementsByName("checkx");
+    const medi = [];
+    const check = [];
+    for (var i = 0; i < arrMedi.length; i++) {
+      medi[i] = arrMedi[i].value;
     }
-    const cb2 = document.getElementById("cb2").checked;
-    if (cb2 === true) {
-      routine += "X";
-    } else {
-      routine += "0";
+    var countCheck = 0;
+    for (var i = 0; i < arrCheck.length; i += 3) {
+      for (var j = 0; j < 3; j++) {
+        var checkVal = arrCheck[i].checked;
+        if (checkVal == true) {
+          routine += "X";
+        } else {
+          routine += "0";
+        }
+      }
+      check[count] = routine;
+      count++;
+      routine = "";
     }
-    const cb3 = document.getElementById("cb3").checked;
-    if (cb3 === true) {
-      routine += "X";
-    } else {
-      routine += "0";
-    }
-    updateDoctorData(messageReceived, date, remarks, medicines, routine);
+    // for(var i = 0; i < arrCheck.length; i++){
+    //     // check[i] = arrCheck[i].checked;
+    // }
+    // const cb1 = document.getElementById("cb1").checked;
+    // if (cb1 === true) {
+    //   routine += "X";
+    // } else {
+    //   routine += "0";
+    // }
+    // const cb2 = document.getElementById("cb2").checked;
+    // if (cb2 === true) {
+    //   routine += "X";
+    // } else {
+    //   routine += "0";
+    // }
+    // const cb3 = document.getElementById("cb3").checked;
+    // if (cb3 === true) {
+    //   routine += "X";
+    // } else {
+    //   routine += "0";
+    // }
+    updateDoctorData(messageReceived, date, remarks, medi, check);
     sendNotification("Doctor has updated the medicines", messageID);
   });
 }
