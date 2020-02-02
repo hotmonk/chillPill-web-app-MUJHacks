@@ -41,6 +41,7 @@ var messageID = null;
 //--------------------------------------------------
 messaging.onMessage(function(payload) {
   messageID = payload["data"]["message"];
+//   console.log(messageID);
   messageReceived = payload["data"]["message"];
   alert(messageReceived);
   var patientData = databaseRef.once("value", gotData, errData);
@@ -75,14 +76,22 @@ var databaseRef = firebase
   .ref()
   .child("Patient"); //storing the reference to the firebase realtime database
 
-function updateDoctorData(patientID, date, remarks, medicine, routine) {
+function updateDoctorData(patientID, date, remarks, medicine, routine, mediarray) {
   var appointmentData = {
     Date: date,
     Remarks: remarks
   };
-  var medicineData = {
-    medicine: routine
-  };
+  var medicineData = {};
+  for (let i = 0; i < medicine.length; i++) {
+    // let medname = medicine[i];
+    // let checkname = routine[i];
+    medicineData[i] = { medicine: mediarray[i] };
+  }
+//   console.log("xxxx");
+//   console.log(medicine);
+//   console.log(routine);
+//   console.log(medicineData);
+//   console.log("xxxx");
   // var medicineData = {};
   // for (const key of Object.keys(medicines)) {   TODO
   //   medicineData[key] = medicines[key];
@@ -104,12 +113,13 @@ function updateDoctorData(patientID, date, remarks, medicine, routine) {
 }
 
 const sendNotification = async (message, id) => {
+    console.log(id);
   try {
     const options = {
       headers: {
         "Content-Type": "application/json",
         Authorization:
-          "AAAAyqqDhNk:APA91bFzMXH66vRN_SU41gEsDVgnNkIu6zq3hgY9SljqoRtf1D3oOSRS28BijHf829jq-y0wOCnzpPEpO7MvzLTB6NIgW5mFLG65RLg6irMYeA-Hi6SzGMbxRMPsnJMpmq39t9RT3UqO"
+          "key=AAAAyqqDhNk:APA91bFzMXH66vRN_SU41gEsDVgnNkIu6zq3hgY9SljqoRtf1D3oOSRS28BijHf829jq-y0wOCnzpPEpO7MvzLTB6NIgW5mFLG65RLg6irMYeA-Hi6SzGMbxRMPsnJMpmq39t9RT3UqO"
       }
     };
     // var data = {
@@ -121,11 +131,13 @@ const sendNotification = async (message, id) => {
     //   }
     // };
     var data = {
-      to: "/topics/" + id,
-      data: {
-        title: "Take a chill pill",
-        message: message
-      }
+        "to":id,
+        "data":{
+            "notification": {
+                "title": "Doctor has updated the medicines" ,
+                "body": message
+            }
+        }
     };
     let res = await axios.post(
       "https://fcm.googleapis.com/fcm/send",
@@ -149,7 +161,6 @@ if (doctorForm) {
     const remarks = document.getElementById("remarks").value;
     // const medicines = document.getElementById("medicines").value;
     // console.log("medicines=========" + medicines);
-    var routine = "";
     const arrMedi = document.getElementsByName("medi");
     const arrCheck = document.getElementsByName("checkx");
     const medi = [];
@@ -159,18 +170,27 @@ if (doctorForm) {
     }
     var countCheck = 0;
     for (var i = 0; i < arrCheck.length; i += 3) {
-      for (var j = 0; j < 3; j++) {
+      var routine = "";
+      for (var j = i; j < (i + 3); j++) {
         var checkVal = arrCheck[i].checked;
-        if (checkVal == true) {
-          routine += "X";
+        // console.log(j);
+        // console.log(checkVal);
+        if (checkVal === true) {
+          routine += "X-";
         } else {
-          routine += "0";
+          routine += "0-";
         }
       }
-      check[count] = routine;
-      count++;
-      routine = "";
+      check[countCheck] = routine;
+      countCheck++;
+    //   routine = "";
     }
+    const mediarray = [];
+    for(let a = 0 ; a < medi.length; a++){
+        mediarray[a] = check[a] + "" + medi[a];
+    }
+    // console.log(mediarray);
+    // console.log("bhasad")
     // for(var i = 0; i < arrCheck.length; i++){
     //     // check[i] = arrCheck[i].checked;
     // }
@@ -192,7 +212,7 @@ if (doctorForm) {
     // } else {
     //   routine += "0";
     // }
-    updateDoctorData(messageReceived, date, remarks, medi, check);
+    updateDoctorData(messageReceived, date, remarks, medi, check, mediarray);
     sendNotification("Doctor has updated the medicines", messageID);
   });
 }
