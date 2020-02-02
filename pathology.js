@@ -21,31 +21,58 @@ messaging
     return messaging.getToken();
   })
   .then(function(token) {
-    console.log(token);
+    // console.log(token);
   })
   .catch(function(err) {
     console.log(err);
   });
 
 var messageReceived = null;
-var reports = null;
+var personalInfo = null;
 messaging.onMessage(function(payload) {
   messageReceived = payload["data"]["message"];
-  alert(messageReceived);
+  alert("Please upload patient's report.");
   var patientData = databaseRef.once("value", gotData, errData);
+
+
   function gotData(data) {
     // console.log(data.val());
     var requiredInfo = { ...data.val() };
     // console.log(xinfo);
-    reports = requiredInfo[messageReceived]["Reports"];
-    console.log(reports);
+    personalInfo = requiredInfo[messageReceived]["Personal Info"];
+    // console.log(reports);
+    var name = personalInfo["Name"];
+    var age = personalInfo["Age"];
     var bp = personalInfo["BloodPressure"];
     var weight = personalInfo["Weight"];
+    var appointment = personalInfo[messageReceived]["Appointments"];
+    var remarks = appointment["Remarks"];
     document.getElementById("b1").innerHTML = name;
     document.getElementById("b2").innerHTML = age;
     document.getElementById("b3").innerHTML = bp;
     document.getElementById("b4").innerHTML = weight;
+    document.getElementsById("b5").innerHTML = remarks;
   }
+
+//   function gotData(data) {
+//     var requiredInfo = { ...data.val() };
+//     personalInfo = requiredInfo[messageReceived]["Personal Info"];
+//     name = personalInfo["Name"];
+//     // console.log("name=======" + name);
+//     age = personalInfo["Age"];
+//     bp = personalInfo["BloodPressure"];
+//     weight = personalInfo["Weight"];
+//     appointmentsInfo = requiredInfo[messageReceived]["Appointments"];
+//     medicinesInfo = requiredInfo[messageReceived]["Medicines"];
+//     reportsInfo = requiredInfo[messageReceived]["Reports"];
+
+//     document.getElementById("b1").innerHTML = name;
+//     document.getElementById("b2").innerHTML = age;
+//     document.getElementById("b3").innerHTML = bp;
+//     document.getElementById("b4").innerHTML = weight;
+//     // console.log(personalInfo);
+//   }
+
   function errData(err) {
     console.log(err);
   }
@@ -60,13 +87,14 @@ var databaseRef = firebase
 
 function updatePatientReport(patientID, reportURL) {
   //function to update the data of the selected patient
-  var data = {};
-  for (const key of Object.keys(reports)) {
-    data[key] = reports[key];
-  }
-  data["latestReport"] = reportURL;
+  var data = {
+      PastReports:{Link : reportURL}
+  };
+  
+  
+//   data["latestReport"] = reportURL;
   var x = patientID;
-  var id = "Reports";
+  var id = "PastReports";
   firebase
     .database()
     .ref("Patient/" + x + "/" + id)
