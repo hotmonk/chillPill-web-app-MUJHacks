@@ -107,9 +107,14 @@ fileButton.addEventListener("change", function(e) {
       function(error) {},
       function() {
         // Upload completed successfully, now we can get the download URL
-        
+
         task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
           url = downloadURL;
+          var uploadedalert= document.createElement("div");
+          var alerttext=document.createTextNode("Uploaded!");
+          uploadedalert.appendChild(alerttext);
+          document.getElementById("submitSec").appendChild(uploadedalert);
+          
           console.log("File available at", downloadURL);
           updatePatientReport(messageReceived, downloadURL);
         });
@@ -117,6 +122,7 @@ fileButton.addEventListener("change", function(e) {
     );
   }
 });
+
 
 // var pathoForm = document.querySelector(".patho-form"); //selecting the div with className = .nurse-form
 // if (pathoForm) {
