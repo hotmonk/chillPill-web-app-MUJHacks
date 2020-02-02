@@ -107,6 +107,7 @@ fileButton.addEventListener("change", function(e) {
       function(error) {},
       function() {
         // Upload completed successfully, now we can get the download URL
+        
         task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
           url = downloadURL;
           console.log("File available at", downloadURL);
