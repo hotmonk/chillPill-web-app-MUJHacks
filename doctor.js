@@ -165,3 +165,31 @@ if (doctorForm) {
     sendNotification("Doctor has updated the medicines", messageID);
   });
 }
+// ***************RETRIEV DATA***********************
+var storage= firebase.storage();
+var storageRef= storage.ref();
+
+
+var i=0;
+//use version >6
+storageRef.child('').listAll().then(function(result){
+  result.items.forEach(function(reportRef){
+    // console.lo g("report "+ reportRef.toString());
+    i++;
+    downloadReport(i, reportRef);
+  });
+});
+
+function downloadReport(i, report){
+  report.getDownloadURL().then(function(url){
+    console.log(url);
+    var btn= document.createElement("button");
+    btn.className = 'btn btn-info btn-round';
+    btn.onclick=function(){
+      window.open(url);
+    }
+
+    btn.innerHTML='report '+ i;
+    document.getElementById("reportlist").appendChild(btn);
+  });
+}
