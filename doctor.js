@@ -21,7 +21,7 @@ messaging
     return messaging.getToken();
   })
   .then(function(token) {
-    console.log(token);
+    // console.log(token);
   })
   .catch(function(err) {
     console.log(err);
@@ -43,7 +43,7 @@ messaging.onMessage(function(payload) {
   messageID = payload["data"]["message"];
 //   console.log(messageID);
   messageReceived = payload["data"]["message"];
-  alert(messageReceived);
+  alert("Notification: Patient has left OPD after basic check up");
   var patientData = databaseRef.once("value", gotData, errData);
   function gotData(data) {
     var requiredInfo = { ...data.val() };
@@ -124,6 +124,7 @@ const sendNotification = async (message, id) => {
       options
     );
     console.log("Patient has been notified");
+    messageID = null;
   } catch (err) {
     console.log(err);
   }

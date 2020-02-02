@@ -21,7 +21,7 @@ var firebaseConfig = {
       return messaging.getToken();
     })
     .then(function(token) {
-      console.log(token);
+    //   console.log(token);
     })
     .catch(function(err) {
       console.log(err);
@@ -31,7 +31,7 @@ var firebaseConfig = {
   var personalInfo = null;
   messaging.onMessage(function(payload) {
     messageReceived = payload["data"]["message"];
-    alert(messageReceived);
+    alert("Notification: A new patient has arrived in OPD, please proceed for basic check up.");
     var patientData = databaseRef.once("value", gotData, errData);
     function gotData(data) {
       // console.log(data.val());
@@ -46,7 +46,7 @@ var firebaseConfig = {
       document.getElementById("b2").innerHTML = age;
       document.getElementById("b3").innerHTML = weight;
       document.getElementById("b4").innerHTML = bp;
-      console.log(personalInfo);
+    //   console.log(personalInfo);
     }
     function errData(err) {
       console.log(err);
@@ -94,30 +94,4 @@ var firebaseConfig = {
       updatePatientData(messageReceived, weight, bloodPressure);
     });
   }
-  // var patientData = databaseRef.on('value', gotData, errData);
-  // function gotData(data){
-  //     // console.log(data.val());
-  //     var xinfo = {...data.val()};
-  //     console.log(xinfo);
-  //     var abcd = xinfo["+919354522796"];
-  //     // console.log(PersonalInfo);
-  //     var PersonalInfo = abcd["Personal Info"];
-  //     // var data =
-  
-  // }
-  // function errData(err){
-  //     console.log(err);
-  // }
-  
-  // var patientData = databaseRef.once('value', gotData, errData);
-  // function gotData(data){
-  //     // console.log(data.val());
-  //     var requiredInfo = {...data.val()};
-  //     // console.log(xinfo);
-  //     var personalInfo = requiredInfo[messageReceived]["Personal_Info"];
-  //     console.log(personalInfo);
-  // }
-  // function errData(err){
-  //     console.log(err);
-  // }
   
